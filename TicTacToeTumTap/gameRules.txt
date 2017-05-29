@@ -1,0 +1,32 @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@														 @
+@														 @
+@   ##### ##### #####      ##### ##### #####     ##### ##### #####     ##### #   # #   #     ##### ##### ####    @
+@     #     #   #            #   #   # #           #   #   # #           #   #   # ## ##       #   #   # #   #   @
+@     #     #   #     ###    #   ##### #     ###   #   #   # ###   ###   #   #   # # # # ###   #   ##### ####    @
+@     #     #   #            #   #   # #           #   #   # #           #   #   # #   #       #   #   # #       @
+@     #   ##### #####        #   #   # #####       #   ##### #####       #   ##### #   #       #   #   # #       @
+@														 @
+@														 @
+@ +------------------------------------------------------------------------------------------------------------+ @
+@ |  INSTRUCTIONS                                                                                              | @
+@ |									                 	 	       | @
+@ |  1 - Choose the difficulty of the game (Level 1 - board 3x3, Level 2 - board 5x5, Level 3 - board 7x7).    | @
+@ |  2 - Select the number of players (Player 1 x Machine or Player 1 x Player 2).                             | @
+@ |  3 - Start a new game.                                                                                     | @
+@ |  4 - Insert the name of the players.                                                                       | @
+@ |  5 - Wait until the machine define who starts, playing Tail or Heads.                                      | @
+@ |  6 - The start player plays with symbol 'X' and the other player with symbol 'O'.                          | @
+@ |  7 - Each player must switch taking turns and inserting the coordenates (x and y) to define in which board | @
+@ |      position they want to enter their symbol. The coordenates must match a free position in the board.    | @
+@ |  8 - The winner is the player that get their symbols connected in a straight line in one direction:        | @
+@ |      vertically, horizontally or diagonally.                                                               | @
+@ |  9 - The winner receives 3 points (Level 1), 6 points (Level 2) or 9 points (Level 3).                     | @
+@ | 10 - The looser loses 2 points (Level 1), 4 points (Level 2) or 9 points (Level 3).                        | @
+@ | 11 - At the end, the score of each player is updated at the ranking. Press 4 in the main menu to see the   | @
+@ |      ranking.                                                                                              | @
+@ | 12 - Press 5 at the Main Menu to quit the game.                                                            | @
+@ +------------------------------------------------------------------------------------------------------------+ @
+@                                            Press 1 - Menu                                                      @
+@										 				 @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

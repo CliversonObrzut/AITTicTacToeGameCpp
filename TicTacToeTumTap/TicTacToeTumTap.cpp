@@ -2,10 +2,13 @@
 //
 
 #include "stdafx.h"
-
+#include "game.h"
 
 int main()
 {
-    return 0;
+	Game game;
+	game.Start();
+	return 0;
 }
+
 

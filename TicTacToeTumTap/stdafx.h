@@ -8,7 +8,14 @@
 #include "targetver.h"
 
 #include <stdio.h>
+#include <iostream>
 #include <tchar.h>
+#include <string>
+#include <fstream>
+#include <windows.h>
+#include <conio.h>
+
+using namespace std;
 
 
 
