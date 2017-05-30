@@ -146,6 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="gameBoardLevel1.txt" />
+    <Text Include="gameBoardLevel2.txt" />
+    <Text Include="gameBoardLevel3.txt" />
+    <Text Include="gameLevel.txt" />
+    <Text Include="gameMenu.txt" />
+    <Text Include="gamePlayer.txt" />
+    <Text Include="gameRanking.txt" />
+    <Text Include="gameResult.txt" />
+    <Text Include="gameRules.txt" />
+    <Text Include="gameWelcome.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,36 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="gameBoardLevel1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameBoardLevel2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameBoardLevel3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameLevel.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameMenu.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gamePlayer.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameRanking.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameResult.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameRules.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="gameWelcome.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

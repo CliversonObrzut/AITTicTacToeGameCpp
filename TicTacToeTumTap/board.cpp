@@ -46,4 +46,12 @@ char Board::getSymbolO()
 	return symbol_o;
 }
 
+void Board::testSetBoard()
+{
+	for (int y = 0; y < size; y++)
+		for (int x = 0; x < size; x++)
+			setBoard(x, y, 'X');
+}
+
+
 

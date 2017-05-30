@@ -70,7 +70,7 @@ void FileManager::convertToLines()
 	int row = 0;
 	char * c = new char[content.length()];
 	c = &content[0];
-	for(int i=0; i< content.length();i++)
+	for(int i = 0; i < content.length(); i++)
 	{
 		if (c[i] == '\n')
 		{

@@ -30,7 +30,7 @@ void Game::getWelcomeScreen()
 	WelcomeScreen ws(setup.getWelcomeFile(), setup.getWidth(), setup.getWelcomeHeight());
 	ws.resizeScreen();
 	ws.display();
-	Sleep(3000);
+	Sleep(2000);
 	ws.clrscr();
 	getMenuScreen();
 }
@@ -78,14 +78,22 @@ void Game::getPlayerScreen()
 	bool menu = false;
 	PlayerScreen ps(setup.getPlayerFile(), setup.getWidth(), setup.getPlayerHeight());
 	ps.resizeScreen();
-	ps.display();
+	ps.display(setup.getNPlayers());
 	while(!menu)
 	{
 		int option = getUserOption(ps.getNumberOfOptions());
 		if (option == 49)
+		{
 			setup.setNPlayers(1);
+			ps.clrscr();
+			ps.display(setup.getNPlayers());
+		}
 		else if (option == 50)
+		{
 			setup.setNPlayers(2);
+			ps.clrscr();
+			ps.display(setup.getNPlayers());
+		}
 		else if (option == 51)
 			menu = true;
 		else
@@ -99,16 +107,29 @@ void Game::getLevelScreen()
 	bool menu = false;
 	LevelScreen ls(setup.getLevelFile(), setup.getWidth(), setup.getLevelHeight());
 	ls.resizeScreen();
-	ls.display();
+	ls.display(setup.getLevel());
 	while(!menu)
 	{
 		int option = getUserOption(ls.getNumberOfOptions());
 		if (option == 49)
+		{
 			setup.setLevel(3);
+			ls.clrscr();
+			ls.display(setup.getLevel());
+		}
 		else if (option == 50)
+		{
 			setup.setLevel(5);
+			ls.clrscr();
+			ls.display(setup.getLevel());
+		}
+			
 		else if (option == 51)
+		{
 			setup.setLevel(7);
+			ls.clrscr();
+			ls.display(setup.getLevel());
+		}			
 		else if (option == 52)
 			menu = true;
 		else
@@ -122,7 +143,7 @@ void Game::getRulesScreen()
 	RulesScreen rs(setup.getRulesFile(), setup.getWidth(), setup.getRulesHeight());
 	rs.resizeScreen();
 	rs.display();
-	Sleep(3000);
+	Sleep(2000);
 	rs.clrscr();
 }
 
@@ -131,54 +152,39 @@ void Game::getRankingScreen()
 	RankingScreen rs(setup.getRankingFile(), setup.getWidth(), setup.getRankingHeight());
 	rs.resizeScreen();
 	rs.display();
-	Sleep(3000);
+	Sleep(2000);
 	rs.clrscr();
 }
 void Game::getLevelOneScreen()
 {
-	Board board(setup.getLevel());
-	LevelOneScreen los(setup.getLeveOneFile(), setup.getWidth(), setup.getLevelOneHeight());
+	LevelOneScreen los(setup.getLeveOneFile(), setup.getWidth(), setup.getLevelOneHeight(), setup.getLevel());
 	los.resizeScreen();
-	los.display(board);
-	Sleep(3000);
+	los.display();
+	Sleep(2000);
 	los.clrscr();
-
-	for (int y = 0; y < setup.getLevel(); y++)
-		for (int x = 0; x < setup.getLevel(); x++)
-			board.setBoard(x,y,'X');
-
-	los.display(board);
+	los.display();
 	Sleep(3000);
 	los.clrscr();
 }
 void Game::getLevelTwoScreen()
 {
-	Board board(setup.getLevel());
-	LevelTwoScreen lts(setup.getLevelTwoFile(), setup.getWidth(), setup.getLevelTwoHeight());
+	LevelTwoScreen lts(setup.getLevelTwoFile(), setup.getWidth(), setup.getLevelTwoHeight(), setup.getLevel());
 	lts.resizeScreen();
-	lts.display(board);
-	Sleep(3000);
+	lts.display();
+	Sleep(2000);
 	lts.clrscr();
-	for (int y = 0; y < setup.getLevel(); y++)
-		for (int x = 0; x < setup.getLevel(); x++)
-			board.setBoard(x, y, 'X');
-	lts.display(board);
+	lts.display();
 	Sleep(3000);
 	lts.clrscr();
 }
 void Game::getLevelThreeScreen()
 {
-	Board board(setup.getLevel());
-	LevelThreeScreen lts(setup.getLevelThreeFile(), setup.getWidth(), setup.getLevelThreeHeight());
+	LevelThreeScreen lts(setup.getLevelThreeFile(), setup.getWidth(), setup.getLevelThreeHeight(), setup.getLevel());
 	lts.resizeScreen();
-	lts.display(board);
-	Sleep(3000);
+	lts.display();
+	Sleep(2000);
 	lts.clrscr();
-	for (int y = 0; y < setup.getLevel(); y++)
-		for (int x = 0; x < setup.getLevel(); x++)
-			board.setBoard(x, y, 'X');
-	lts.resizeScreen();
-	lts.display(board);
+	lts.display();
 	Sleep(3000);
 	lts.clrscr();
 }

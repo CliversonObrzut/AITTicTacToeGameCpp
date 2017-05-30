@@ -17,6 +17,7 @@ public:
 	char getSymbolO();
 	char getSymbolX();
 	int getSize();
+	void testSetBoard();
 };
 
 #endif

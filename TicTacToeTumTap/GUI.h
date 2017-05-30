@@ -17,6 +17,12 @@ public:
 	void resizeScreen();
 	int getScreenWidth();
 	int getScreenHeight();
+	void findScreenPosition(int * screenX, int *screenY);
+	void redrawPlayScreen(Board b, bool *first_display, int x, int y);
+	void redrawBoard(Board b, string * screen, int x, int y);
+	void redrawPlayerScreen(int nPlayer, char selectSymbol, int select_x, int select_y);
+	void redrawLevelScreen(int level, char selectSymbol, int select_x, int select_y);
+	void updateScreen(string * screen);
 };
 
 class WelcomeScreen : public Gui
@@ -36,17 +42,31 @@ public:
 class PlayerScreen : public Gui
 {
 	int number_of_options;
+	int select_x;
+	int select_y;
+	char selectSymbol;
 public:
 	PlayerScreen(string fileName, int width, int height);
 	int getNumberOfOptions();
+	void display(int nPlayers);
+	int getSelectX();
+	int getSelectY();
+	char getSelectSymbol();
 };
 
 class LevelScreen : public Gui
 {
 	int number_of_options;
+	int select_x;
+	int select_y;
+	char selectSymbol;
 public:
 	LevelScreen(string fileName, int width, int height);
 	int getNumberOfOptions();
+	void display(int level);
+	int getSelectX();
+	int getSelectY();
+	char getSelectSymbol();
 };
 
 class RulesScreen : public Gui
@@ -68,23 +88,47 @@ public:
 
 class LevelOneScreen : public Gui
 {
+	Board board;
+	int board_x;
+	int board_y;
+	int text_x;
+	int text_y;
+	bool first_display = true;
 public:
-	LevelOneScreen(string fileName, int width, int height);
-	void display(Board b);
+	LevelOneScreen(string fileName, int width, int height, int level);
+	void display() override;
+	int getBoardX();
+	int getBoardY();
 };
 
 class LevelTwoScreen : public Gui
 {
+	Board board;
+	int board_x;
+	int board_y;
+	int text_x;
+	int text_y;
+	bool first_display = true;
 public:
-	LevelTwoScreen(string fileName, int width, int height);
-	void display(Board b);
+	LevelTwoScreen(string fileName, int width, int height, int level);
+	void display() override;
+	int getBoardX();
+	int getBoardY();
 };
 
 class LevelThreeScreen : public Gui
 {
+	Board board;
+	int board_x;
+	int board_y;
+	int text_x;
+	int text_y;
+	bool first_display = true;
 public:
-	LevelThreeScreen(string fileName, int width, int height);
-	void display(Board b);
+	LevelThreeScreen(string fileName, int width, int height, int level);
+	void display() override;
+	int getBoardX();
+	int getBoardY();
 };
 
 class ResultScreen : public Gui
