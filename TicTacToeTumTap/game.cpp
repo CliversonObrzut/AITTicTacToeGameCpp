@@ -31,7 +31,6 @@ void Game::getWelcomeScreen()
 	ws.resizeScreen();
 	ws.display();
 	Sleep(2000);
-	ws.clrscr();
 	getMenuScreen();
 }
 
@@ -44,7 +43,6 @@ void Game::getMenuScreen()
 		ms.resizeScreen();
 		ms.display();
 		int option = getUserOption(ms.getNumberOfOptions());
-		ms.clrscr();
 		if (option == 49)
 		{
 			if (setup.getLevel() == 3)
@@ -85,13 +83,11 @@ void Game::getPlayerScreen()
 		if (option == 49)
 		{
 			setup.setNPlayers(1);
-			ps.clrscr();
 			ps.display(setup.getNPlayers());
 		}
 		else if (option == 50)
 		{
 			setup.setNPlayers(2);
-			ps.clrscr();
 			ps.display(setup.getNPlayers());
 		}
 		else if (option == 51)
@@ -99,7 +95,6 @@ void Game::getPlayerScreen()
 		else
 			exit(1);
 	}
-	ps.clrscr();
 }
 
 void Game::getLevelScreen()
@@ -114,20 +109,16 @@ void Game::getLevelScreen()
 		if (option == 49)
 		{
 			setup.setLevel(3);
-			ls.clrscr();
 			ls.display(setup.getLevel());
 		}
 		else if (option == 50)
 		{
 			setup.setLevel(5);
-			ls.clrscr();
 			ls.display(setup.getLevel());
-		}
-			
+		}			
 		else if (option == 51)
 		{
 			setup.setLevel(7);
-			ls.clrscr();
 			ls.display(setup.getLevel());
 		}			
 		else if (option == 52)
@@ -135,56 +126,123 @@ void Game::getLevelScreen()
 		else
 			exit(1);
 	}
-	ls.clrscr();
 }
 
 void Game::getRulesScreen()
 {
+	bool menu = false;
 	RulesScreen rs(setup.getRulesFile(), setup.getWidth(), setup.getRulesHeight());
 	rs.resizeScreen();
 	rs.display();
-	Sleep(2000);
-	rs.clrscr();
+	while (!menu)
+	{
+		int option = getUserOption(rs.getNumberOfOptions());
+		if (option == 49)
+			menu = true;
+		else
+			exit(1);
+	}
 }
 
 void Game::getRankingScreen()
 {
+	bool menu = false;
 	RankingScreen rs(setup.getRankingFile(), setup.getWidth(), setup.getRankingHeight());
 	rs.resizeScreen();
 	rs.display();
-	Sleep(2000);
-	rs.clrscr();
+	while (!menu)
+	{
+		int option = getUserOption(rs.getNumberOfOptions());
+		if (option == 49)
+			menu = true;
+		else
+			exit(1);
+	}
 }
 void Game::getLevelOneScreen()
 {
-	LevelOneScreen los(setup.getLeveOneFile(), setup.getWidth(), setup.getLevelOneHeight(), setup.getLevel());
+	bool finished = false;
+	LevelOneScreen los(setup.getLeveOneFile(), setup.getWidth(), setup.getLevelOneHeight(), setup.getLevel(), setup.getNPlayers(), setup.getPlayerOne(), setup.getPlayerTwo());
+	ResultScreen rs(setup.getResultFile());
 	los.resizeScreen();
-	los.display();
-	Sleep(2000);
-	los.clrscr();
-	los.display();
-	Sleep(3000);
-	los.clrscr();
+	int turn = 1;
+	while(!finished)
+	{
+		los.display();
+		Sleep(2000);
+		los.display();
+		Sleep(2000);
+		finished = true;
+	}
+	if (turn == 1)
+		los.displayResult(rs, setup.getPlayerOne().getName(), setup.getWinnerPoints());
+	else
+		los.displayResult(rs, setup.getPlayerTwo().getName(), setup.getWinnerPoints());
+	bool menu = false;
+	while (!menu)
+	{
+		int option = getUserOption(rs.getNumberOfOptions());
+		if (option == 49)
+			menu = true;
+		else
+			exit(1);
+	}
 }
 void Game::getLevelTwoScreen()
 {
-	LevelTwoScreen lts(setup.getLevelTwoFile(), setup.getWidth(), setup.getLevelTwoHeight(), setup.getLevel());
+	bool finished = false;
+	LevelTwoScreen lts(setup.getLevelTwoFile(), setup.getWidth(), setup.getLevelTwoHeight(), setup.getLevel(), setup.getNPlayers(), setup.getPlayerOne(), setup.getPlayerTwo());
+	ResultScreen rs(setup.getResultFile());
 	lts.resizeScreen();
-	lts.display();
-	Sleep(2000);
-	lts.clrscr();
-	lts.display();
-	Sleep(3000);
-	lts.clrscr();
+	int turn = 1;
+	while(!finished)
+	{
+		lts.display();
+		Sleep(2000);
+		lts.display();
+		Sleep(3000);
+		finished = true;
+	}
+	if (turn == 1)
+		lts.displayResult(rs, setup.getPlayerOne().getName(), setup.getWinnerPoints());
+	else
+		lts.displayResult(rs, setup.getPlayerTwo().getName(), setup.getWinnerPoints());
+	bool menu = false;
+	while (!menu)
+	{
+		int option = getUserOption(rs.getNumberOfOptions());
+		if (option == 49)
+			menu = true;
+		else
+			exit(1);
+	}
 }
 void Game::getLevelThreeScreen()
 {
-	LevelThreeScreen lts(setup.getLevelThreeFile(), setup.getWidth(), setup.getLevelThreeHeight(), setup.getLevel());
+	bool finished = false;
+	LevelThreeScreen lts(setup.getLevelThreeFile(), setup.getWidth(), setup.getLevelThreeHeight(), setup.getLevel(), setup.getNPlayers(), setup.getPlayerOne(), setup.getPlayerTwo());
+	ResultScreen rs(setup.getResultFile());
 	lts.resizeScreen();
-	lts.display();
-	Sleep(2000);
-	lts.clrscr();
-	lts.display();
-	Sleep(3000);
-	lts.clrscr();
+	int turn = 1;
+	while(!finished)
+	{
+		lts.display();
+		Sleep(2000);
+		lts.display();
+		Sleep(3000);
+		finished = true;
+	}
+	if (turn == 1)
+		lts.displayResult(rs, setup.getPlayerOne().getName(), setup.getWinnerPoints());
+	else
+		lts.displayResult(rs, setup.getPlayerTwo().getName(), setup.getWinnerPoints());
+	bool menu = false;
+	while (!menu)
+	{
+		int option = getUserOption(rs.getNumberOfOptions());
+		if (option == 49)
+			menu = true;
+		else
+			exit(1);
+	}
 }

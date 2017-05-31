@@ -4,6 +4,8 @@
 Player::Player(string name)
 {
 	this->name = name;
+	this->points = 0;
+	symbol = ' ';
 }
 
 string Player::getName()
@@ -24,6 +26,21 @@ char Player::getSymbol()
 void Player::setSymbol(char symbol)
 {
 	this->symbol = symbol;
+}
+
+int Player::getPoints()
+{
+	return points;
+}
+
+void Player::addPoints(int points)
+{
+	this->points = this->points + points;
+}
+
+void Player::resetPoints()
+{
+	this->points = 0;
 }
 
 int Player::getCoordenates(char coordenateName)

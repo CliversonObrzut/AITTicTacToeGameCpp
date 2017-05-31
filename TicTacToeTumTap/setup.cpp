@@ -2,10 +2,12 @@
 #include "setup.h"
 
 // Setup constructor
-Setup::Setup()
+Setup::Setup() : p1("PL1"), p2("CPU")
 {
 	n_players = 1;
 	level = 3;
+	winner_points = 3;
+	loser_points = -2;
 	welcome_file = "gameWelcome.txt";
 	menu_file = "gameMenu.txt";
 	players_file = "gamePlayer.txt";
@@ -49,6 +51,48 @@ void Setup::setLevel(int level)
 {
 	this->level = level;
 }
+
+// get points for the winner and looser
+int Setup::getWinnerPoints()
+{
+	if (level == 3)
+		return winner_points * 1;
+	else if (level == 5)
+		return winner_points * 2;
+	else
+		return (winner_points * 3) + 1;
+}
+
+int Setup::getLoserPoints()
+{
+	if (level == 3)
+		return loser_points * 1;
+	else if (level == 5)
+		return loser_points * 2;
+	else
+		return loser_points * 3;
+}
+
+Player Setup::getPlayerOne()
+{
+	return p1;
+}
+
+Player Setup::getPlayerTwo()
+{
+	return p2;
+}
+
+void Setup::setPlayerOneName(string name)
+{
+	p1.setName(name);
+}
+
+void Setup::setPlayerTwoName(string name)
+{
+	p2.setName(name);
+}
+
 
 // get content from files
 string Setup::getWelcomeFile()

@@ -3,6 +3,7 @@
 #include "setup.h"
 #include "player.h"
 #include "board.h"
+#include "GUI.h"
 
 #ifndef GAME
 #define GAME

@@ -21,6 +21,7 @@ int Gui::getScreenHeight()
 
 void Gui::display()
 {
+	clrscr();
 	cout << getContent();
 }
 
@@ -69,6 +70,7 @@ void Gui::redrawPlayScreen(Board board, bool * first_display, int boardX, int bo
 	screen = getContentLines();
 	if (*first_display)
 	{
+		clrscr();
 		cout << getContent();
 		*first_display = false;
 	}
@@ -136,11 +138,43 @@ void Gui::redrawLevelScreen(int level, char selectSymbol, int select_x, int sele
 	updateScreen(screen);
 }
 
+void Gui::drawResultScreen(ResultScreen rs, Board board, string name, int points, int board_x, int board_y)
+{
+	string * screen = new string[linesCount()];
+	screen = getContentLines();
+
+	redrawBoard(board, screen, board_x, board_y);
+
+	string * result_screen = new string[rs.linesCount()];
+	result_screen = rs.getContentLines();
+	int difference = linesCount() - rs.linesCount();
+	for(int i=0; i < rs.linesCount(); i++)
+	{
+		screen[difference + i] = result_screen[i];
+	}
+
+	drawTextInScreen(screen, name, rs.getNameX(), rs.getNameY());
+
+	string point = to_string(points);
+	drawTextInScreen(screen, point, rs.getPointX(), rs.getPointY());
+
+	updateScreen(screen);
+}
+
+void Gui::drawTextInScreen(string * screen, string text, int screen_x, int screen_y)
+{
+	char * string = new char[text.length()];
+	string = &text[0];
+	for (int i = 0; i < text.length(); i++)
+		screen[screen_y][screen_x + i] = string[i];
+}
+
 void Gui::updateScreen(string* screen)
 {
 	string newContent;
 	for (int i = 0; i < linesCount(); i++)
 		newContent = newContent + screen[i];
+	clrscr();
 	cout << newContent;
 }
 
@@ -256,18 +290,25 @@ int RankingScreen::getNumberOfOptions()
 }
 
 
-LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int level) : Gui(fileName, width, height), board(level)
+LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level), player_one("PL1"), player_two("PL2")
 {
 	board_x = 54;
 	board_y = 15;
 	first_display = true;
 	text_x = 43;
 	text_y = 22;
+	player_one = p1;
+	player_two = p2;
 }
 
 void LevelOneScreen::display()
 {
 	redrawPlayScreen(board, &first_display, board_x, board_y);
+}
+
+void LevelOneScreen::displayResult(ResultScreen rs, string name, int points)
+{
+	drawResultScreen(rs, board, name, points, board_x, board_y);
 }
 
 int LevelOneScreen::getBoardX()
@@ -280,19 +321,27 @@ int LevelOneScreen::getBoardY()
 	return board_y;
 }
 
-LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level) : Gui(fileName, width, height), board(level)
+LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level), player_one("XXX"), player_two("YYY")
 {
 	board_x = 50;
 	board_y = 15;
 	first_display = true;
 	text_x = 41;
 	text_y = 23;
+	player_one = p1;
+	player_two = p2;
 }
 
 void LevelTwoScreen::display()
 {
 	redrawPlayScreen(board, &first_display, board_x, board_y);
 }
+
+void LevelTwoScreen::displayResult(ResultScreen rs, string name, int points)
+{
+	drawResultScreen(rs, board, name, points, board_x, board_y);
+}
+
 
 int LevelTwoScreen::getBoardX()
 {
@@ -304,19 +353,27 @@ int LevelTwoScreen::getBoardY()
 	return board_y;
 }
 
-LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int level) : Gui(fileName, width, height), board(level)
+LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level), player_one("XXX"), player_two("YYY")
 {
-	board_x = 48;
+	board_x = 46;
 	board_y = 15;
 	first_display = true;
-	text_x = 39;
+	text_x = 37;
 	text_y = 25;
+	player_one = p1;
+	player_two = p2;
 }
 
 void LevelThreeScreen::display()
 {
 	redrawPlayScreen(board, &first_display, board_x, board_y);
 }
+
+void LevelThreeScreen::displayResult(ResultScreen rs, string name, int points)
+{
+	drawResultScreen(rs, board, name, points, board_x, board_y);
+}
+
 
 int LevelThreeScreen::getBoardX()
 {
@@ -331,11 +388,35 @@ int LevelThreeScreen::getBoardY()
 ResultScreen::ResultScreen(string fileName) : Gui(fileName)
 {
 	number_of_options = 1;
+	name_x = 41;
+	name_y =23;
+	points_x = 78;
+	points_y = 23;
 }
 
 int ResultScreen::getNumberOfOptions()
 {
 	return number_of_options;
+}
+
+int ResultScreen::getNameX()
+{
+	return name_x;
+}
+
+int ResultScreen::getNameY()
+{
+	return name_y;
+}
+
+int ResultScreen::getPointX()
+{
+	return points_x;
+}
+
+int ResultScreen::getPointY()
+{
+	return points_y;
 }
 
 

@@ -2,9 +2,12 @@
 #include "stdafx.h"
 #include "file_manager.h"
 #include "board.h"
+#include "player.h"
 
 #ifndef GUI
 #define GUI
+
+class ResultScreen;
 
 class Gui : public FileManager
 {
@@ -22,6 +25,8 @@ public:
 	void redrawBoard(Board b, string * screen, int x, int y);
 	void redrawPlayerScreen(int nPlayer, char selectSymbol, int select_x, int select_y);
 	void redrawLevelScreen(int level, char selectSymbol, int select_x, int select_y);
+	void drawResultScreen(ResultScreen rs, Board board, string name, int points, int board_x, int board_y);
+	void drawTextInScreen(string * screen, string text, int screen_x, int screen_y);
 	void updateScreen(string * screen);
 };
 
@@ -89,14 +94,17 @@ public:
 class LevelOneScreen : public Gui
 {
 	Board board;
+	Player player_one;
+	Player player_two;
 	int board_x;
 	int board_y;
 	int text_x;
 	int text_y;
 	bool first_display = true;
 public:
-	LevelOneScreen(string fileName, int width, int height, int level);
+	LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
 	void display() override;
+	void displayResult(ResultScreen rs, string name, int points);
 	int getBoardX();
 	int getBoardY();
 };
@@ -104,14 +112,17 @@ public:
 class LevelTwoScreen : public Gui
 {
 	Board board;
+	Player player_one;
+	Player player_two;
 	int board_x;
 	int board_y;
 	int text_x;
 	int text_y;
 	bool first_display = true;
 public:
-	LevelTwoScreen(string fileName, int width, int height, int level);
+	LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
 	void display() override;
+	void displayResult(ResultScreen rs, string name, int points);
 	int getBoardX();
 	int getBoardY();
 };
@@ -119,14 +130,17 @@ public:
 class LevelThreeScreen : public Gui
 {
 	Board board;
+	Player player_one;
+	Player player_two;
 	int board_x;
 	int board_y;
 	int text_x;
 	int text_y;
 	bool first_display = true;
 public:
-	LevelThreeScreen(string fileName, int width, int height, int level);
+	LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
 	void display() override;
+	void displayResult(ResultScreen rs, string name, int points);
 	int getBoardX();
 	int getBoardY();
 };
@@ -134,9 +148,17 @@ public:
 class ResultScreen : public Gui
 {
 	int number_of_options;
+	int name_x;
+	int name_y;
+	int points_x;
+	int points_y;
 public:
 	ResultScreen(string fileName);
 	int getNumberOfOptions();
+	int getNameX();
+	int getNameY();
+	int getPointX();
+	int getPointY();
 };
 
 #endif
