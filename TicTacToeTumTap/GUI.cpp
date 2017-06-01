@@ -152,11 +152,16 @@ void Gui::drawResultScreen(ResultScreen rs, Board board, string name, int points
 	{
 		screen[difference + i] = result_screen[i];
 	}
-
-	drawTextInScreen(screen, name, rs.getNameX(), rs.getNameY());
-
+	int x = rs.getNameX();
+	int y = rs.getNameY();
+	if (board.getSize() == 5)
+		y++;
+	if (board.getSize() == 7)
+		y = y + 3;
+	drawTextInScreen(screen, name, x, y);
+	x = rs.getPointX();
 	string point = to_string(points);
-	drawTextInScreen(screen, point, rs.getPointX(), rs.getPointY());
+	drawTextInScreen(screen, point, x, y);
 
 	updateScreen(screen);
 }
@@ -290,15 +295,13 @@ int RankingScreen::getNumberOfOptions()
 }
 
 
-LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level), player_one("PL1"), player_two("PL2")
+LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
 {
 	board_x = 54;
 	board_y = 15;
 	first_display = true;
 	text_x = 43;
 	text_y = 22;
-	player_one = p1;
-	player_two = p2;
 }
 
 void LevelOneScreen::display()
@@ -321,15 +324,13 @@ int LevelOneScreen::getBoardY()
 	return board_y;
 }
 
-LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level), player_one("XXX"), player_two("YYY")
+LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
 {
 	board_x = 50;
 	board_y = 15;
 	first_display = true;
 	text_x = 41;
 	text_y = 23;
-	player_one = p1;
-	player_two = p2;
 }
 
 void LevelTwoScreen::display()
@@ -353,15 +354,13 @@ int LevelTwoScreen::getBoardY()
 	return board_y;
 }
 
-LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level), player_one("XXX"), player_two("YYY")
+LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
 {
 	board_x = 46;
 	board_y = 15;
 	first_display = true;
 	text_x = 37;
 	text_y = 25;
-	player_one = p1;
-	player_two = p2;
 }
 
 void LevelThreeScreen::display()

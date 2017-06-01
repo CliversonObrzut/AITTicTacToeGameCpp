@@ -4,11 +4,13 @@
 
 Game::Game()
 {
-	
+
 }
 
 void Game::Start()
 {
+	p1.setName(stp.getPlayerOneName());
+	p2.setName(stp.getPlayerTwoName());
 	getWelcomeScreen();
 }
 
@@ -25,9 +27,22 @@ int Game::getUserOption(int number_of_options)
 	return option;
 }
 
+void Game::updatePoints(Player *pw, Player *pl)
+{
+	if (pw->getPoints() + stp.getWinnerPoints() > 9999)
+		pw->maxPoints();
+	else
+		pw->addPoints(stp.getWinnerPoints());
+
+	if (pl->getPoints() - stp.getLoserPoints() < 0)
+		pl->resetPoints();
+	else
+		pl->decreasePoints(stp.getLoserPoints());
+}
+
 void Game::getWelcomeScreen()
 {
-	WelcomeScreen ws(setup.getWelcomeFile(), setup.getWidth(), setup.getWelcomeHeight());
+	WelcomeScreen ws(stp.getWelcomeFile(), stp.getWidth(), stp.getWelcomeHeight());
 	ws.resizeScreen();
 	ws.display();
 	Sleep(2000);
@@ -37,7 +52,7 @@ void Game::getWelcomeScreen()
 void Game::getMenuScreen()
 {
 	bool gameEnd = false;
-	MenuScreen ms(setup.getMenuFile(), setup.getWidth(), setup.getMenuHeight());
+	MenuScreen ms(stp.getMenuFile(), stp.getWidth(), stp.getMenuHeight());
 	while(!gameEnd)
 	{
 		ms.resizeScreen();
@@ -45,11 +60,11 @@ void Game::getMenuScreen()
 		int option = getUserOption(ms.getNumberOfOptions());
 		if (option == 49)
 		{
-			if (setup.getLevel() == 3)
+			if (stp.getLevel() == 3)
 				getLevelOneScreen();
-			if (setup.getLevel() == 5)
+			if (stp.getLevel() == 5)
 				getLevelTwoScreen();
-			if (setup.getLevel() == 7)
+			if (stp.getLevel() == 7)
 				getLevelThreeScreen();
 		}
 		else if (option == 50)
@@ -63,32 +78,28 @@ void Game::getMenuScreen()
 		else if (option == 54)
 			gameEnd = true;
 		else
-		{
-			cout << "Logic error";
-			system("pause");
 			exit(1);
-		}
 	}
 }
 
 void Game::getPlayerScreen()
 {
 	bool menu = false;
-	PlayerScreen ps(setup.getPlayerFile(), setup.getWidth(), setup.getPlayerHeight());
+	PlayerScreen ps(stp.getPlayerFile(), stp.getWidth(), stp.getPlayerHeight());
 	ps.resizeScreen();
-	ps.display(setup.getNPlayers());
+	ps.display(stp.getNPlayers());
 	while(!menu)
 	{
 		int option = getUserOption(ps.getNumberOfOptions());
 		if (option == 49)
 		{
-			setup.setNPlayers(1);
-			ps.display(setup.getNPlayers());
+			stp.setNPlayers(1);
+			ps.display(stp.getNPlayers());
 		}
 		else if (option == 50)
 		{
-			setup.setNPlayers(2);
-			ps.display(setup.getNPlayers());
+			stp.setNPlayers(2);
+			ps.display(stp.getNPlayers());
 		}
 		else if (option == 51)
 			menu = true;
@@ -100,26 +111,26 @@ void Game::getPlayerScreen()
 void Game::getLevelScreen()
 {
 	bool menu = false;
-	LevelScreen ls(setup.getLevelFile(), setup.getWidth(), setup.getLevelHeight());
+	LevelScreen ls(stp.getLevelFile(), stp.getWidth(), stp.getLevelHeight());
 	ls.resizeScreen();
-	ls.display(setup.getLevel());
+	ls.display(stp.getLevel());
 	while(!menu)
 	{
 		int option = getUserOption(ls.getNumberOfOptions());
 		if (option == 49)
 		{
-			setup.setLevel(3);
-			ls.display(setup.getLevel());
+			stp.setLevel(3);
+			ls.display(stp.getLevel());
 		}
 		else if (option == 50)
 		{
-			setup.setLevel(5);
-			ls.display(setup.getLevel());
+			stp.setLevel(5);
+			ls.display(stp.getLevel());
 		}			
 		else if (option == 51)
 		{
-			setup.setLevel(7);
-			ls.display(setup.getLevel());
+			stp.setLevel(7);
+			ls.display(stp.getLevel());
 		}			
 		else if (option == 52)
 			menu = true;
@@ -131,7 +142,7 @@ void Game::getLevelScreen()
 void Game::getRulesScreen()
 {
 	bool menu = false;
-	RulesScreen rs(setup.getRulesFile(), setup.getWidth(), setup.getRulesHeight());
+	RulesScreen rs(stp.getRulesFile(), stp.getWidth(), stp.getRulesHeight());
 	rs.resizeScreen();
 	rs.display();
 	while (!menu)
@@ -147,7 +158,7 @@ void Game::getRulesScreen()
 void Game::getRankingScreen()
 {
 	bool menu = false;
-	RankingScreen rs(setup.getRankingFile(), setup.getWidth(), setup.getRankingHeight());
+	RankingScreen rs(stp.getRankingFile(), stp.getWidth(), stp.getRankingHeight());
 	rs.resizeScreen();
 	rs.display();
 	while (!menu)
@@ -162,8 +173,8 @@ void Game::getRankingScreen()
 void Game::getLevelOneScreen()
 {
 	bool finished = false;
-	LevelOneScreen los(setup.getLeveOneFile(), setup.getWidth(), setup.getLevelOneHeight(), setup.getLevel(), setup.getNPlayers(), setup.getPlayerOne(), setup.getPlayerTwo());
-	ResultScreen rs(setup.getResultFile());
+	LevelOneScreen los(stp.getLeveOneFile(), stp.getWidth(), stp.getLevelOneHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
+	ResultScreen rs(stp.getResultFile());
 	los.resizeScreen();
 	int turn = 1;
 	while(!finished)
@@ -175,9 +186,16 @@ void Game::getLevelOneScreen()
 		finished = true;
 	}
 	if (turn == 1)
-		los.displayResult(rs, setup.getPlayerOne().getName(), setup.getWinnerPoints());
+	{
+		updatePoints(&p1, &p2);
+		los.displayResult(rs, p1.getName(), stp.getWinnerPoints());
+	}
 	else
-		los.displayResult(rs, setup.getPlayerTwo().getName(), setup.getWinnerPoints());
+	{
+		updatePoints(&p2, &p1);
+		los.displayResult(rs, p1.getName(), stp.getWinnerPoints());
+	}
+		
 	bool menu = false;
 	while (!menu)
 	{
@@ -191,8 +209,8 @@ void Game::getLevelOneScreen()
 void Game::getLevelTwoScreen()
 {
 	bool finished = false;
-	LevelTwoScreen lts(setup.getLevelTwoFile(), setup.getWidth(), setup.getLevelTwoHeight(), setup.getLevel(), setup.getNPlayers(), setup.getPlayerOne(), setup.getPlayerTwo());
-	ResultScreen rs(setup.getResultFile());
+	LevelTwoScreen lts(stp.getLevelTwoFile(), stp.getWidth(), stp.getLevelTwoHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
+	ResultScreen rs(stp.getResultFile());
 	lts.resizeScreen();
 	int turn = 1;
 	while(!finished)
@@ -204,9 +222,15 @@ void Game::getLevelTwoScreen()
 		finished = true;
 	}
 	if (turn == 1)
-		lts.displayResult(rs, setup.getPlayerOne().getName(), setup.getWinnerPoints());
+	{
+		updatePoints(&p1, &p2);
+		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
+	}
 	else
-		lts.displayResult(rs, setup.getPlayerTwo().getName(), setup.getWinnerPoints());
+	{
+		updatePoints(&p2, &p1);
+		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
+	}
 	bool menu = false;
 	while (!menu)
 	{
@@ -220,8 +244,8 @@ void Game::getLevelTwoScreen()
 void Game::getLevelThreeScreen()
 {
 	bool finished = false;
-	LevelThreeScreen lts(setup.getLevelThreeFile(), setup.getWidth(), setup.getLevelThreeHeight(), setup.getLevel(), setup.getNPlayers(), setup.getPlayerOne(), setup.getPlayerTwo());
-	ResultScreen rs(setup.getResultFile());
+	LevelThreeScreen lts(stp.getLevelThreeFile(), stp.getWidth(), stp.getLevelThreeHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
+	ResultScreen rs(stp.getResultFile());
 	lts.resizeScreen();
 	int turn = 1;
 	while(!finished)
@@ -233,9 +257,15 @@ void Game::getLevelThreeScreen()
 		finished = true;
 	}
 	if (turn == 1)
-		lts.displayResult(rs, setup.getPlayerOne().getName(), setup.getWinnerPoints());
+	{
+		updatePoints(&p1, &p2);
+		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
+	}
 	else
-		lts.displayResult(rs, setup.getPlayerTwo().getName(), setup.getWinnerPoints());
+	{
+		updatePoints(&p2, &p1);
+		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
+	}
 	bool menu = false;
 	while (!menu)
 	{

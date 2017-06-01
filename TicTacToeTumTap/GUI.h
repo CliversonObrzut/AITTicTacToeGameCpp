@@ -94,8 +94,6 @@ public:
 class LevelOneScreen : public Gui
 {
 	Board board;
-	Player player_one;
-	Player player_two;
 	int board_x;
 	int board_y;
 	int text_x;
@@ -112,8 +110,6 @@ public:
 class LevelTwoScreen : public Gui
 {
 	Board board;
-	Player player_one;
-	Player player_two;
 	int board_x;
 	int board_y;
 	int text_x;
@@ -130,8 +126,6 @@ public:
 class LevelThreeScreen : public Gui
 {
 	Board board;
-	Player player_one;
-	Player player_two;
 	int board_x;
 	int board_y;
 	int text_x;

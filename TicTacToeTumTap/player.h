@@ -10,15 +10,16 @@ class Player
 	char symbol;
 	int points;
 public:
-	Player(string name);
+	Player();
 	string getName();
 	void setName(string name);
 	char getSymbol();
 	void setSymbol(char symbol);
 	int getPoints();
 	void addPoints(int points);
+	void decreasePoints(int points);
 	void resetPoints();
-	int getCoordenates(char coordenate);
+	void maxPoints();
 };
 
 #endif

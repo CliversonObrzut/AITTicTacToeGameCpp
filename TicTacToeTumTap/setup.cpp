@@ -2,12 +2,14 @@
 #include "setup.h"
 
 // Setup constructor
-Setup::Setup() : p1("PL1"), p2("CPU")
+Setup::Setup()
 {
+	player_one_name = "PL1";
+	player_two_name = "CPU";
 	n_players = 1;
 	level = 3;
 	winner_points = 3;
-	loser_points = -2;
+	loser_points = 2;
 	welcome_file = "gameWelcome.txt";
 	menu_file = "gameMenu.txt";
 	players_file = "gamePlayer.txt";
@@ -60,7 +62,7 @@ int Setup::getWinnerPoints()
 	else if (level == 5)
 		return winner_points * 2;
 	else
-		return (winner_points * 3) + 1;
+		return winner_points * 3;
 }
 
 int Setup::getLoserPoints()
@@ -73,24 +75,14 @@ int Setup::getLoserPoints()
 		return loser_points * 3;
 }
 
-Player Setup::getPlayerOne()
+string Setup::getPlayerOneName()
 {
-	return p1;
+	return player_one_name;
 }
 
-Player Setup::getPlayerTwo()
+string Setup::getPlayerTwoName()
 {
-	return p2;
-}
-
-void Setup::setPlayerOneName(string name)
-{
-	p1.setName(name);
-}
-
-void Setup::setPlayerTwoName(string name)
-{
-	p2.setName(name);
+	return player_two_name;
 }
 
 

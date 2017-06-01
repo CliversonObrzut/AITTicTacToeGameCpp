@@ -10,7 +10,9 @@
 
 class Game
 {
-	Setup setup;
+	Setup stp;
+	Player p1;
+	Player p2;
 public:
 	Game();
 	void Start();
@@ -24,6 +26,7 @@ public:
 	void getLevelTwoScreen();
 	void getLevelThreeScreen();
 	int getUserOption(int number_of_options);
+	void updatePoints(Player * pw, Player *pl);
 };
 
 #endif

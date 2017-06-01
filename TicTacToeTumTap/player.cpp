@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "player.h"
 
-Player::Player(string name)
+Player::Player()
 {
-	this->name = name;
+	this->name = "";
 	this->points = 0;
 	symbol = ' ';
 }
@@ -38,19 +38,17 @@ void Player::addPoints(int points)
 	this->points = this->points + points;
 }
 
+void Player::decreasePoints(int points)
+{
+	this->points = this->points - points;
+}
+
 void Player::resetPoints()
 {
 	this->points = 0;
 }
 
-int Player::getCoordenates(char coordenateName)
+void Player::maxPoints()
 {
-	int coordenate;
-	if (coordenateName == 'x')
-		cout << "- Enter the coordenate of \"" << coordenateName << "\": ";
-	else
-		cout << "- Enter the coordenate of \"" << coordenateName << "\": ";
-
-	cin >> coordenate;
-	return coordenate;
+	this->points = 9999;
 }

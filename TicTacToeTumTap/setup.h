@@ -7,8 +7,8 @@
 
 class Setup
 {
-	Player p1;
-	Player p2;
+	string player_one_name;
+	string player_two_name;
 	int n_players;
 	int level;
 	int winner_points;
@@ -42,10 +42,8 @@ public:
 	void setLevel(int level);
 	int getWinnerPoints();
 	int getLoserPoints();
-	Player getPlayerOne();
-	void setPlayerOneName(string name);
-	Player getPlayerTwo();
-	void setPlayerTwoName(string name);
+	string getPlayerOneName();
+	string getPlayerTwoName();
 	string getWelcomeFile();
 	string getMenuFile();
 	string getPlayerFile();
