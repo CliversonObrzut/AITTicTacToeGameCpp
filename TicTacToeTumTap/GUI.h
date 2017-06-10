@@ -88,7 +88,6 @@ class RankingScreen : public Gui
 public:
 	RankingScreen(string fileName, int width, int height);
 	int getNumberOfOptions();
-	//void updateRanking(); TODO
 };
 
 class LevelOneScreen : public Gui
@@ -99,12 +98,16 @@ class LevelOneScreen : public Gui
 	int text_x;
 	int text_y;
 	bool first_display = true;
+	int number_of_options;
 public:
 	LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
 	void display() override;
 	void displayResult(ResultScreen rs, string name, int points);
+	int getNumberOfOptions();
 	int getBoardX();
 	int getBoardY();
+	int getTextX();
+	int getTextY();
 };
 
 class LevelTwoScreen : public Gui
@@ -115,12 +118,16 @@ class LevelTwoScreen : public Gui
 	int text_x;
 	int text_y;
 	bool first_display = true;
+	int number_of_options;
 public:
 	LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
 	void display() override;
 	void displayResult(ResultScreen rs, string name, int points);
+	int getNumberOfOptions();
 	int getBoardX();
 	int getBoardY();
+	int getTextX();
+	int getTextY();
 };
 
 class LevelThreeScreen : public Gui
@@ -131,12 +138,16 @@ class LevelThreeScreen : public Gui
 	int text_x;
 	int text_y;
 	bool first_display = true;
+	int number_of_options;
 public:
 	LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
 	void display() override;
 	void displayResult(ResultScreen rs, string name, int points);
+	int getNumberOfOptions();
 	int getBoardX();
 	int getBoardY();
+	int getTextX();
+	int getTextY();
 };
 
 class ResultScreen : public Gui

@@ -302,6 +302,12 @@ LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int level
 	first_display = true;
 	text_x = 43;
 	text_y = 22;
+	number_of_options = 2;
+}
+
+int LevelOneScreen::getNumberOfOptions()
+{
+	return number_of_options;
 }
 
 void LevelOneScreen::display()
@@ -324,6 +330,16 @@ int LevelOneScreen::getBoardY()
 	return board_y;
 }
 
+int LevelOneScreen::getTextX()
+{
+	return text_x;
+}
+
+int LevelOneScreen::getTextY()
+{
+	return text_y;
+}
+
 LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
 {
 	board_x = 50;
@@ -331,6 +347,12 @@ LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level
 	first_display = true;
 	text_x = 41;
 	text_y = 23;
+	number_of_options = 2;
+}
+
+int LevelTwoScreen::getNumberOfOptions()
+{
+	return number_of_options;
 }
 
 void LevelTwoScreen::display()
@@ -354,6 +376,16 @@ int LevelTwoScreen::getBoardY()
 	return board_y;
 }
 
+int LevelTwoScreen::getTextX()
+{
+	return text_x;
+}
+
+int LevelTwoScreen::getTextY()
+{
+	return text_y;
+}
+
 LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
 {
 	board_x = 46;
@@ -361,6 +393,12 @@ LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int l
 	first_display = true;
 	text_x = 37;
 	text_y = 25;
+	number_of_options = 2;
+}
+
+int LevelThreeScreen::getNumberOfOptions()
+{
+	return number_of_options;
 }
 
 void LevelThreeScreen::display()
@@ -382,6 +420,16 @@ int LevelThreeScreen::getBoardX()
 int LevelThreeScreen::getBoardY()
 {
 	return board_y;
+}
+
+int LevelThreeScreen::getTextX()
+{
+	return text_x;
+}
+
+int LevelThreeScreen::getTextY()
+{
+	return text_y;
 }
 
 ResultScreen::ResultScreen(string fileName) : Gui(fileName)

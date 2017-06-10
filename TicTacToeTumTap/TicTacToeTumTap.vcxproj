@@ -164,6 +164,8 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="help.h" />
+    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="node.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="setup.h" />
     <ClInclude Include="stdafx.h" />
@@ -175,6 +177,8 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="help.cpp" />
+    <ClCompile Include="linkedList.cpp" />
+    <ClCompile Include="node.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="setup.cpp" />
     <ClCompile Include="stdafx.cpp">
