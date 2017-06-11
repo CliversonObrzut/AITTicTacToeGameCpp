@@ -27,9 +27,16 @@ public:
 	void getLevelTwoScreen();
 	void getLevelThreeScreen();
 	int getUserOption(int number_of_options);
+	int defineWhoStart(int number_of_options);
+	void enterCoordX(Board * board);
+	void enterCoordY(Board * board);
+	int getValidCoordenate(int number_of_options);
+	bool checkVictory(Board * board);
+	bool checkTie(Board * board);
+	void resultUpdates(Board board, int turn);
 	void updatePoints(Player * pw, Player *pl);
 	void updateRanking();
-	void updateLinkedListRanking(LinkedList * scores, LinkedList * players, node * head, node * new_nn, node * new_np, Player p);
+	void updateLinkedListRanking(LinkedList * scores, LinkedList * players, node * new_nn, node * new_np, Player p);
 	void drawTextForFile(string * screen, string text, int file_x, int file_y);
 };
 

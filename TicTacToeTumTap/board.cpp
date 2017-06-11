@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "board.h"
 
+Board::Board()
+{
+	
+}
+
 Board::Board(int level)
 {
 	int lenght = level*level;
@@ -16,6 +21,10 @@ Board::Board(int level)
 	symbol_x = 'X';
 	symbol_o = 'O';
 	size = level;
+	coord_x = -1;
+	coord_y = -1;
+	winner = false;
+	tie = false;
 }
 
 char * Board::getBoard()
@@ -23,12 +32,12 @@ char * Board::getBoard()
 	return board;
 }
 
-void Board::setBoard(int x, int y, char symbol)
+void Board::setBoard(int turn)
 {
-	if (symbol == 'X')
-		board[(size*y)+x] = symbol_x;
+	if (turn == 1)
+		board[(size*coord_y)+coord_x] = symbol_x;
 	else
-		board[(size*y)+x] = symbol_o;
+		board[(size*coord_y)+coord_x] = symbol_o;
 }
 
 int Board::getSize()
@@ -46,12 +55,49 @@ char Board::getSymbolO()
 	return symbol_o;
 }
 
-void Board::testSetBoard()
+int Board::getCoordX()
 {
-	for (int y = 0; y < size; y++)
-		for (int x = 0; x < size; x++)
-			setBoard(x, y, 'X');
+	return coord_x;
 }
 
+int Board::getCoordY()
+{
+	return coord_y;
+}
+
+void Board::setCoordX(int x)
+{
+	coord_x = x;
+}
+
+void Board::setCoordY(int y)
+{
+	coord_y = y;
+	coordIsValid();
+}
+
+bool Board::coordIsValid()
+{
+	if (board[(size * coord_y) + coord_x] != symbol_x && board[(size * coord_y) + coord_x] != symbol_o)
+		return true;
+	return false;
+}
+
+bool Board::getWinner()
+{
+	return winner;
+}
+void Board::setWinner()
+{
+	winner = true;
+}
+bool Board::getTie()
+{
+	return tie;
+}
+void Board::setTie()
+{
+	tie = true;
+}
 
 

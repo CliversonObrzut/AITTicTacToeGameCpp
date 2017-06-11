@@ -21,7 +21,7 @@ public:
 	int getScreenWidth();
 	int getScreenHeight();
 	void findScreenPosition(int * screenX, int *screenY);
-	void redrawPlayScreen(Board b, bool *first_display, int x, int y);
+	void redrawPlayScreen(Board b, Player p1, Player p2, int turn, bool *first_display, int board_x, int board_y, int text_x, int text_y);
 	void redrawBoard(Board b, string * screen, int x, int y);
 	void redrawPlayerScreen(int nPlayer, char selectSymbol, int select_x, int select_y);
 	void redrawLevelScreen(int level, char selectSymbol, int select_x, int select_y);
@@ -92,7 +92,8 @@ public:
 
 class LevelOneScreen : public Gui
 {
-	Board board;
+	Player p1;
+	Player p2;
 	int board_x;
 	int board_y;
 	int text_x;
@@ -100,9 +101,9 @@ class LevelOneScreen : public Gui
 	bool first_display = true;
 	int number_of_options;
 public:
-	LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
-	void display() override;
-	void displayResult(ResultScreen rs, string name, int points);
+	LevelOneScreen(string fileName, int width, int height, int n_player, Board board, Player p1, Player p2);
+	void display(int turn, Board board);
+	void displayResult(ResultScreen rs, Board board, int turn, int points);
 	int getNumberOfOptions();
 	int getBoardX();
 	int getBoardY();
@@ -112,7 +113,8 @@ public:
 
 class LevelTwoScreen : public Gui
 {
-	Board board;
+	Player p1;
+	Player p2;
 	int board_x;
 	int board_y;
 	int text_x;
@@ -120,9 +122,9 @@ class LevelTwoScreen : public Gui
 	bool first_display = true;
 	int number_of_options;
 public:
-	LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
-	void display() override;
-	void displayResult(ResultScreen rs, string name, int points);
+	LevelTwoScreen(string fileName, int width, int height, int n_player, Board board, Player p1, Player p2);
+	void display(int turn, Board board);
+	void displayResult(ResultScreen rs, Board board, int turn, int points);
 	int getNumberOfOptions();
 	int getBoardX();
 	int getBoardY();
@@ -132,7 +134,8 @@ public:
 
 class LevelThreeScreen : public Gui
 {
-	Board board;
+	Player p1;
+	Player p2;
 	int board_x;
 	int board_y;
 	int text_x;
@@ -140,9 +143,9 @@ class LevelThreeScreen : public Gui
 	bool first_display = true;
 	int number_of_options;
 public:
-	LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2);
-	void display() override;
-	void displayResult(ResultScreen rs, string name, int points);
+	LevelThreeScreen(string fileName, int width, int height, int n_player, Board board, Player p1, Player p2);
+	void display(int turn, Board board);
+	void displayResult(ResultScreen rs, Board board, int turn, int points);
 	int getNumberOfOptions();
 	int getBoardX();
 	int getBoardY();
@@ -157,6 +160,8 @@ class ResultScreen : public Gui
 	int name_y;
 	int points_x;
 	int points_y;
+	int text_x;
+	int text_y;
 public:
 	ResultScreen(string fileName);
 	int getNumberOfOptions();
@@ -164,6 +169,8 @@ public:
 	int getNameY();
 	int getPointX();
 	int getPointY();
+	int getTextX();
+	int getTextY();
 };
 
 #endif

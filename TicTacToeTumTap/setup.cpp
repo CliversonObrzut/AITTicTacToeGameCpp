@@ -27,9 +27,9 @@ Setup::Setup()
 	level_height = 23;
 	rules_height = 32;
 	ranking_height = 28;
-	level_one_height = 27;
-	level_two_height = 28;
-	level_three_height = 30;
+	level_one_height = 28;
+	level_two_height = 29;
+	level_three_height = 31;
 }
 
 // get and set number of players

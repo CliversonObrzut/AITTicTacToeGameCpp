@@ -10,14 +10,27 @@ class Board
 	char symbol_x;
 	char symbol_o;
 	int size;
+	int coord_x;
+	int coord_y;
+	bool winner;
+	bool tie;
 public:
+	Board();
 	Board(int level);
 	char * getBoard();
-	void setBoard(int x, int y, char symbol);
+	void setBoard(int turn);
 	char getSymbolO();
 	char getSymbolX();
 	int getSize();
-	void testSetBoard();
+	int getCoordX();
+	void setCoordX(int x);
+	int getCoordY();
+	void setCoordY(int y);
+	bool coordIsValid();
+	bool getWinner();
+	void setWinner();
+	bool getTie();
+	void setTie();
 };
 
 #endif

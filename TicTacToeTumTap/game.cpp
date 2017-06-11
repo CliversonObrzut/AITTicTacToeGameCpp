@@ -28,6 +28,31 @@ int Game::getUserOption(int number_of_options)
 	return option;
 }
 
+int Game::getValidCoordenate(int number_of_options)
+{
+	int option = 0;
+	bool valid = false;
+	while (!valid)
+	{
+		option = _getch();
+		if (option >= 48 && option <= 47 + number_of_options)
+			valid = true;
+	}
+	return option-48;
+}
+
+void Game::resultUpdates(Board board, int turn)
+{
+	if (board.getWinner())
+	{
+		if (turn == 1)
+			updatePoints(&p1, &p2);
+		else
+			updatePoints(&p2, &p1);
+		updateRanking();
+	}
+}
+
 void Game::updatePoints(Player *pw, Player *pl)
 {
 	if (pw->getPoints() + stp.getWinnerPoints() > 9999)
@@ -102,11 +127,10 @@ void Game::updateRanking()
 		np->data1 = stoi(points[i]);
 		np = np->ptr;
 		nn = nn->ptr;
-
 	}
 
-	updateLinkedListRanking(&scores, &players, &np1, &nn11, &np11, p1);
-	updateLinkedListRanking(&scores, &players, &np1, &nn11, &np11, p2);
+	updateLinkedListRanking(&scores, &players, &nn11, &np11, p1);
+	updateLinkedListRanking(&scores, &players, &nn11, &np11, p2);
 
 	int pos = 0;
 	np = scores.getHead();
@@ -136,24 +160,73 @@ void Game::updateRanking()
 	fm.saveData(stp.getRankingFile(), newContent);
 }
 
-void Game::updateLinkedListRanking(LinkedList * scores, LinkedList * players, node * n, node * new_nn, node * new_np, Player p)
+void Game::updateLinkedListRanking(LinkedList * scores, LinkedList * players, node * new_nn, node * new_np, Player p)
 {
 	int pos = 1;
-	node * curr = n;
-	while (curr != NULL)
+	int old_pos = 0;
+	int new_pos = 0;
+	node * curr_p = scores->getHead();
+	node * old_nn = NULL;
+	node * old_np = NULL;
+	while (curr_p != NULL)
 	{
-		if (curr->data1 < p.getPoints())
+		if (curr_p->data1 < p.getPoints())
 		{
 			new_np->data1 = p.getPoints();
 			new_nn->data4 = p.getName();
 			scores->addToPos(*new_np, pos);
-			scores->removeTail();
 			players->addToPos(*new_nn, pos);
-			players->removeTail();
+			new_pos = pos;
 			break;
 		}
 		pos++;
-		curr = curr->ptr;
+		curr_p = curr_p->ptr;
+	}
+
+	pos = 1;
+	node * curr_n = players->getHead();
+	curr_p = scores->getHead();
+	while (curr_n != NULL)
+	{
+		if (curr_n->data4 == p.getName())
+		{
+			if (new_pos != pos)
+			{
+				old_nn = curr_n;
+				old_np = curr_p;
+				old_pos = pos;
+				break;
+			}
+		}
+		pos++;
+		curr_n = curr_n->ptr;
+		curr_p = curr_p->ptr;
+	}
+
+	if(new_pos == 0)
+	{
+		if(old_pos != 0 && p.getPoints() < old_np->data1)
+		{
+			scores->remove(*old_np);
+			players->remove(*old_nn);
+			new_nn->data4 = "ROG";
+			new_np->data1 = 1;
+			scores->addToTail(*new_np);
+			players->addToTail(*new_nn);
+		}
+	}
+	else
+	{
+		if (old_pos == 0)
+		{
+			scores->removeTail();
+			players->removeTail();
+		}
+		else
+		{
+			scores->remove(*old_np);
+			players->remove(*old_nn);
+		}
 	}
 }
 
@@ -211,11 +284,13 @@ void Game::getPlayerScreen()
 		if (option == 49)
 		{
 			stp.setNPlayers(1);
+			p2.setName("PL2");  // Should be CPU but the CPU player engine is not developed yet
 			ps.display(stp.getNPlayers());
 		}
 		else if (option == 50)
 		{
 			stp.setNPlayers(2);
+			p2.setName("PL2");
 			ps.display(stp.getNPlayers());
 		}
 		else if (option == 51)
@@ -290,30 +365,63 @@ void Game::getRankingScreen()
 void Game::getLevelOneScreen()
 {
 	bool finished = false;
+	int turn = 0;
+	Board board(stp.getLevel());
 	LevelOneScreen los(stp.getLeveOneFile(), stp.getWidth(), stp.getLevelOneHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
 	ResultScreen rs(stp.getResultFile());
+
 	los.resizeScreen();
-	int turn = 1;
-	while(!finished)
-	{
-		los.display();
-		Sleep(2000);
-		los.display();
-		Sleep(2000);
-		finished = true;
-	}
-	if (turn == 1)
-	{
-		updatePoints(&p1, &p2);
-		updateRanking();
-		los.displayResult(rs, p1.getName(), stp.getWinnerPoints());
-	}
-	else
-	{
-		updatePoints(&p2, &p1);
-		updateRanking();
-		los.displayResult(rs, p1.getName(), stp.getWinnerPoints());
-	}
+	los.display(turn, board);
+
+	int number_of_options = los.getNumberOfOptions();
+	turn = defineWhoStart(number_of_options);
+	
+	int count = 0;
+	do
+	{		
+		los.display(turn, board);
+		enterCoordX(&board);
+		los.display(turn, board);
+		enterCoordY(&board);			
+		los.display(turn, board);
+		while (_getch() != 13) {}
+		if(board.coordIsValid())
+		{
+			count++;
+			board.setBoard(turn);
+
+			if (checkVictory(&board))
+			{
+				board.setWinner();
+				finished = true;
+			}
+			if (checkTie(&board))
+			{
+				board.setTie();
+				finished = true;
+			}
+			if (!finished)
+			{
+				if (turn == 1)
+					turn = 2;
+				else
+					turn = 1;
+			}
+			if (count == 5)
+			{
+				finished = true;
+				board.setTie();
+				//board.setWinner();
+			}
+		}
+
+		board.setCoordX(-1);
+		board.setCoordY(-1);
+	} 
+	while (!finished);
+
+	resultUpdates(board, turn);
+	los.displayResult(rs, board, turn, stp.getWinnerPoints());
 		
 	bool menu = false;
 	while (!menu)
@@ -325,33 +433,68 @@ void Game::getLevelOneScreen()
 			exit(1);
 	}
 }
+
 void Game::getLevelTwoScreen()
 {
 	bool finished = false;
+	int turn = 0;
+	Board board(stp.getLevel());
 	LevelTwoScreen lts(stp.getLevelTwoFile(), stp.getWidth(), stp.getLevelTwoHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
 	ResultScreen rs(stp.getResultFile());
+	
 	lts.resizeScreen();
-	int turn = 1;
-	while(!finished)
+	lts.display(turn, board);
+
+	int number_of_options = lts.getNumberOfOptions();
+	turn = defineWhoStart(number_of_options);
+
+	int count = 0;
+	do
 	{
-		lts.display();
-		Sleep(2000);
-		lts.display();
-		Sleep(3000);
-		finished = true;
-	}
-	if (turn == 1)
-	{
-		updatePoints(&p1, &p2);
-		updateRanking();
-		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
-	}
-	else
-	{
-		updatePoints(&p2, &p1);
-		updateRanking();
-		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
-	}
+		lts.display(turn, board);
+		enterCoordX(&board);
+		lts.display(turn, board);
+		enterCoordY(&board);
+		lts.display(turn, board);
+		while (_getch() != 13) {}
+		if (board.coordIsValid())
+		{
+			count++;
+			board.setBoard(turn);
+
+			if (checkVictory(&board))
+			{
+				board.setWinner();
+				finished = true;
+			}
+			if (checkTie(&board))
+			{
+				board.setTie();
+				finished = true;
+			}
+			if (!finished)
+			{
+				if (turn == 1)
+					turn = 2;
+				else
+					turn = 1;
+			}
+			if (count == 5)
+			{
+				finished = true;
+				//board.setWinner();
+				board.setTie();
+			}
+		}
+
+		board.setCoordX(-1);
+		board.setCoordY(-1);
+	} 
+	while (!finished);
+
+	resultUpdates(board, turn);
+	lts.displayResult(rs, board, turn, stp.getWinnerPoints());
+
 	bool menu = false;
 	while (!menu)
 	{
@@ -362,33 +505,68 @@ void Game::getLevelTwoScreen()
 			exit(1);
 	}
 }
+
 void Game::getLevelThreeScreen()
 {
 	bool finished = false;
+	int turn = 0;
+	Board board(stp.getLevel());
 	LevelThreeScreen lts(stp.getLevelThreeFile(), stp.getWidth(), stp.getLevelThreeHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
 	ResultScreen rs(stp.getResultFile());
+	
 	lts.resizeScreen();
-	int turn = 1;
-	while(!finished)
+	lts.display(turn, board);
+
+	int number_of_options = lts.getNumberOfOptions();
+	turn = defineWhoStart(number_of_options);
+
+	int count = 0;
+	do
 	{
-		lts.display();
-		Sleep(2000);
-		lts.display();
-		Sleep(3000);
-		finished = true;
-	}
-	if (turn == 1)
-	{
-		updatePoints(&p1, &p2);
-		updateRanking();
-		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
-	}
-	else
-	{
-		updatePoints(&p2, &p1);
-		updateRanking();
-		lts.displayResult(rs, p1.getName(), stp.getWinnerPoints());
-	}
+		lts.display(turn, board);
+		enterCoordX(&board);
+		lts.display(turn, board);
+		enterCoordY(&board);
+		lts.display(turn, board);
+		while (_getch() != 13){}
+		if (board.coordIsValid())
+		{
+			count++;
+			board.setBoard(turn);
+
+			if (checkVictory(&board))
+			{
+				board.setWinner();
+				finished = true;
+			}
+			if (checkTie(&board))
+			{
+				board.setTie();
+				finished = true;
+			}
+			if (!finished)
+			{
+				if (turn == 1)
+					turn = 2;
+				else
+					turn = 1;
+			}
+			if (count == 5)
+			{
+				finished = true;
+				//board.setWinner();
+				board.setTie();
+			}
+		}
+
+		board.setCoordX(-1);
+		board.setCoordY(-1);
+	} 
+	while (!finished);
+
+	resultUpdates(board, turn);
+	lts.displayResult(rs, board, turn, stp.getWinnerPoints());
+
 	bool menu = false;
 	while (!menu)
 	{
@@ -397,5 +575,42 @@ void Game::getLevelThreeScreen()
 			menu = true;
 		else
 			exit(1);
+	}	
+}
+
+int Game::defineWhoStart(int numberOfOptions)
+{
+	while (true)
+	{
+		int option = getUserOption(numberOfOptions);
+		if (option == 49)
+			return 1;
+		if (option == 50)
+			return 2;
+		else
+			return 0;
 	}
 }
+
+void Game::enterCoordX(Board * board)
+{
+	int coordX = getValidCoordenate(stp.getLevel());
+	board->setCoordX(coordX);
+}
+
+void Game::enterCoordY(Board * board)
+{
+	int coordY = getValidCoordenate(stp.getLevel());
+	board->setCoordY(coordY);
+}
+
+bool Game::checkVictory(Board * board)
+{
+	return false;
+}
+
+bool Game::checkTie(Board * board)
+{
+	return false;
+}
+

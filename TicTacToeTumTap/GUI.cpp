@@ -64,20 +64,55 @@ void Gui::findScreenPosition(int * screenX, int * screenY)
 	}
 }
 
-void Gui::redrawPlayScreen(Board board, bool * first_display, int boardX, int boardY)
+void Gui::redrawPlayScreen(Board board, Player p1, Player p2, int turn, bool * first_display, int boardX, int boardY, int textX, int textY)
 {
 	string * screen = new string[linesCount()];
 	screen = getContentLines();
 	if (*first_display)
 	{
-		clrscr();
-		cout << getContent();
+		drawTextInScreen(screen, p1.getName(), textX + 11, textY + 1);
+		drawTextInScreen(screen, p2.getName(), textX + 11, textY + 2);
+		updateScreen(screen);
 		*first_display = false;
 	}
 	else
 	{
-		board.testSetBoard();
 		redrawBoard(board, screen, boardX, boardY);
+		string spaces = "                                                  ";
+		string message = "";
+		string value_x;
+		string value_y;
+		if (board.getCoordX() == -1)
+			value_x = "_";
+		else
+			value_x = to_string(board.getCoordX());
+		if (board.getCoordY() == -1)
+			value_y = "_";
+		else
+			value_y = to_string(board.getCoordY());
+
+		string coord_x = "- Enter the board position X: " + value_x;
+		string coord_y = "- Enter the board position Y: " + value_y;
+		if (value_x != "_" && value_y != "_")
+		{
+			if (board.coordIsValid())
+				message = "- Good play! (Enter)";
+			else
+				message = "- Position already filled! Try again! (Enter)";
+		}
+		else
+			message = spaces;
+
+		string player_turn = "";
+		if (turn == 1)
+			player_turn = p1.getName() + "'s turn!     ";
+		else
+			player_turn = p2.getName() + "'s turn!     ";
+
+		drawTextInScreen(screen, player_turn, textX, textY);
+		drawTextInScreen(screen, coord_x, textX, textY + 1);
+		drawTextInScreen(screen, coord_y, textX, textY + 2);
+		drawTextInScreen(screen, message, textX, textY + 3);
 		updateScreen(screen);
 	}
 }
@@ -152,17 +187,30 @@ void Gui::drawResultScreen(ResultScreen rs, Board board, string name, int points
 	{
 		screen[difference + i] = result_screen[i];
 	}
-	int x = rs.getNameX();
-	int y = rs.getNameY();
-	if (board.getSize() == 5)
-		y++;
-	if (board.getSize() == 7)
-		y = y + 3;
-	drawTextInScreen(screen, name, x, y);
-	x = rs.getPointX();
-	string point = to_string(points);
-	drawTextInScreen(screen, point, x, y);
-
+	if(board.getWinner())
+	{
+		int x = rs.getNameX();
+		int y = rs.getNameY();
+		if (board.getSize() == 5)
+			y++;
+		if (board.getSize() == 7)
+			y = y + 3;
+		drawTextInScreen(screen, name, x, y);
+		x = rs.getPointX();
+		string point = to_string(points);
+		drawTextInScreen(screen, point, x, y);
+	}
+	if(board.getTie())
+	{
+		int x = rs.getTextX();
+		int y = rs.getTextY();
+		if (board.getSize() == 5)
+			y++;
+		if (board.getSize() == 7)
+			y = y + 3;
+		string tieMessage = "          It was a tie! No points added or removed!           ";
+		drawTextInScreen(screen, tieMessage, x, y);
+	}
 	updateScreen(screen);
 }
 
@@ -295,8 +343,10 @@ int RankingScreen::getNumberOfOptions()
 }
 
 
-LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
+LevelOneScreen::LevelOneScreen(string fileName, int width, int height, int n_player, Board board, Player p1, Player p2) : Gui(fileName, width, height)
 {
+	this->p1 = p1;
+	this->p2 = p2;
 	board_x = 54;
 	board_y = 15;
 	first_display = true;
@@ -310,14 +360,17 @@ int LevelOneScreen::getNumberOfOptions()
 	return number_of_options;
 }
 
-void LevelOneScreen::display()
+void LevelOneScreen::display(int turn, Board board)
 {
-	redrawPlayScreen(board, &first_display, board_x, board_y);
+	redrawPlayScreen(board, p1, p2, turn, &first_display, board_x, board_y, text_x, text_y);
 }
 
-void LevelOneScreen::displayResult(ResultScreen rs, string name, int points)
+void LevelOneScreen::displayResult(ResultScreen rs, Board board, int turn, int points)
 {
-	drawResultScreen(rs, board, name, points, board_x, board_y);
+	if(turn == 1)
+		drawResultScreen(rs, board, p1.getName(), points, board_x, board_y);
+	else
+		drawResultScreen(rs, board, p2.getName(), points, board_x, board_y);
 }
 
 int LevelOneScreen::getBoardX()
@@ -340,8 +393,10 @@ int LevelOneScreen::getTextY()
 	return text_y;
 }
 
-LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
+LevelTwoScreen::LevelTwoScreen(string fileName, int width, int height, int n_player, Board board, Player p1, Player p2) : Gui(fileName, width, height)
 {
+	this->p1 = p1;
+	this->p2 = p2;
 	board_x = 50;
 	board_y = 15;
 	first_display = true;
@@ -355,14 +410,17 @@ int LevelTwoScreen::getNumberOfOptions()
 	return number_of_options;
 }
 
-void LevelTwoScreen::display()
+void LevelTwoScreen::display(int turn, Board board)
 {
-	redrawPlayScreen(board, &first_display, board_x, board_y);
+	redrawPlayScreen(board, p1, p2, turn, &first_display, board_x, board_y, text_x, text_y);
 }
 
-void LevelTwoScreen::displayResult(ResultScreen rs, string name, int points)
+void LevelTwoScreen::displayResult(ResultScreen rs, Board board, int turn, int points)
 {
-	drawResultScreen(rs, board, name, points, board_x, board_y);
+	if (turn == 1)
+		drawResultScreen(rs, board, p1.getName(), points, board_x, board_y);
+	else
+		drawResultScreen(rs, board, p2.getName(), points, board_x, board_y);
 }
 
 
@@ -386,8 +444,10 @@ int LevelTwoScreen::getTextY()
 	return text_y;
 }
 
-LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int level, int n_player, Player p1, Player p2) : Gui(fileName, width, height), board(level)
+LevelThreeScreen::LevelThreeScreen(string fileName, int width, int height, int n_player, Board board, Player p1, Player p2) : Gui(fileName, width, height)
 {
+	this->p1 = p1;
+	this->p2 = p2;
 	board_x = 46;
 	board_y = 15;
 	first_display = true;
@@ -401,14 +461,17 @@ int LevelThreeScreen::getNumberOfOptions()
 	return number_of_options;
 }
 
-void LevelThreeScreen::display()
+void LevelThreeScreen::display(int turn, Board board)
 {
-	redrawPlayScreen(board, &first_display, board_x, board_y);
+	redrawPlayScreen(board, p1, p2, turn, &first_display, board_x, board_y, text_x, text_y);
 }
 
-void LevelThreeScreen::displayResult(ResultScreen rs, string name, int points)
+void LevelThreeScreen::displayResult(ResultScreen rs, Board board, int turn, int points)
 {
-	drawResultScreen(rs, board, name, points, board_x, board_y);
+	if (turn == 1)
+		drawResultScreen(rs, board, p1.getName(), points, board_x, board_y);
+	else
+		drawResultScreen(rs, board, p2.getName(), points, board_x, board_y);
 }
 
 
@@ -436,9 +499,11 @@ ResultScreen::ResultScreen(string fileName) : Gui(fileName)
 {
 	number_of_options = 1;
 	name_x = 41;
-	name_y =23;
+	name_y =24;
 	points_x = 78;
-	points_y = 23;
+	points_y = 24;
+	text_x = 25;
+	text_y = 24;
 }
 
 int ResultScreen::getNumberOfOptions()
@@ -465,6 +530,17 @@ int ResultScreen::getPointY()
 {
 	return points_y;
 }
+
+int ResultScreen::getTextX()
+{
+	return text_x;
+}
+
+int ResultScreen::getTextY()
+{
+	return text_y;
+}
+
 
 
 
