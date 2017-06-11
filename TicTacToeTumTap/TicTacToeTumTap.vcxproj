@@ -153,6 +153,7 @@
     <Text Include="gameMenu.txt" />
     <Text Include="gamePlayer.txt" />
     <Text Include="gameRanking.txt" />
+    <Text Include="gameRankingOriginal.txt" />
     <Text Include="gameResult.txt" />
     <Text Include="gameRules.txt" />
     <Text Include="gameWelcome.txt" />

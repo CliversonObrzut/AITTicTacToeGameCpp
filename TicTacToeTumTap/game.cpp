@@ -74,6 +74,13 @@ void Game::drawTextForFile(string * screen, string text, int file_x, int file_y)
 		screen[file_x][file_y + i] = string[i];
 }
 
+void Game::resetRanking()
+{
+	FileManager fro(stp.getOriginalRankingFile());
+	FileManager fr(stp.getRankingFile());
+	fr.saveData(stp.getRankingFile(), fro.getContent());
+}
+
 void Game::updateRanking()
 {
 	FileManager fm(stp.getRankingFile());
@@ -81,9 +88,9 @@ void Game::updateRanking()
 	file = fm.getContentLines();
 	LinkedList scores;
 	LinkedList players;
-	node np1(0), np2(0), np3(0), np4(0), np5(0), np6(0), np7(0), np8(0), np9(0), np10(0), np11(0);
+	node np1(0), np2(0), np3(0), np4(0), np5(0), np6(0), np7(0), np8(0), np9(0), np10(0), np11(0), np12(0);
 	string n = ".";
-	node nn1(n), nn2(n), nn3(n), nn4(n), nn5(n), nn6(n), nn7(n), nn8(n), nn9(n), nn10(n), nn11(n);
+	node nn1(n), nn2(n), nn3(n), nn4(n), nn5(n), nn6(n), nn7(n), nn8(n), nn9(n), nn10(n), nn11(n), nn12(n);
 
 	scores.addToHead(np1);
 	scores.addToTail(np2);
@@ -130,7 +137,7 @@ void Game::updateRanking()
 	}
 
 	updateLinkedListRanking(&scores, &players, &nn11, &np11, p1);
-	updateLinkedListRanking(&scores, &players, &nn11, &np11, p2);
+	updateLinkedListRanking(&scores, &players, &nn12, &np12, p2);
 
 	int pos = 0;
 	np = scores.getHead();
@@ -205,7 +212,7 @@ void Game::updateLinkedListRanking(LinkedList * scores, LinkedList * players, no
 
 	if(new_pos == 0)
 	{
-		if(old_pos != 0 && p.getPoints() < old_np->data1)
+		if(old_pos == 10 && p.getPoints() == 0)
 		{
 			scores->remove(*old_np);
 			players->remove(*old_nn);
@@ -213,6 +220,15 @@ void Game::updateLinkedListRanking(LinkedList * scores, LinkedList * players, no
 			new_np->data1 = 1;
 			scores->addToTail(*new_np);
 			players->addToTail(*new_nn);
+		}
+		if(old_pos != 0)
+		{
+			scores->remove(*old_np);
+			players->remove(*old_nn);
+			new_nn->data4 = p.getName();
+			new_np->data1 = p.getPoints();
+			scores->addToPos(*new_np, old_pos);
+			players->addToPos(*new_nn, old_pos);
 		}
 	}
 	else
@@ -233,6 +249,7 @@ void Game::updateLinkedListRanking(LinkedList * scores, LinkedList * players, no
 void Game::getWelcomeScreen()
 {
 	WelcomeScreen ws(stp.getWelcomeFile(), stp.getWidth(), stp.getWelcomeHeight());
+	stp.setConsoleColor("blue");
 	ws.resizeScreen();
 	ws.display();
 	Sleep(2000);
@@ -243,8 +260,10 @@ void Game::getMenuScreen()
 {
 	bool gameEnd = false;
 	MenuScreen ms(stp.getMenuFile(), stp.getWidth(), stp.getMenuHeight());
+	
 	while(!gameEnd)
 	{
+		stp.setConsoleColor("blue-green");
 		ms.resizeScreen();
 		ms.display();
 		int option = getUserOption(ms.getNumberOfOptions());
@@ -358,6 +377,11 @@ void Game::getRankingScreen()
 		int option = getUserOption(rs.getNumberOfOptions());
 		if (option == 49)
 			menu = true;
+		if (option == 50)
+		{
+			resetRanking();
+			menu = true;
+		}			
 		else
 			exit(1);
 	}
@@ -370,13 +394,13 @@ void Game::getLevelOneScreen()
 	LevelOneScreen los(stp.getLeveOneFile(), stp.getWidth(), stp.getLevelOneHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
 	ResultScreen rs(stp.getResultFile());
 
+	stp.setConsoleColor("green-yellow");
 	los.resizeScreen();
 	los.display(turn, board);
 
 	int number_of_options = los.getNumberOfOptions();
-	turn = defineWhoStart(number_of_options);
+	turn = defineWhoStart(number_of_options, board.getSymbolX(), board.getSymbolO());
 	
-	int count = 0;
 	do
 	{		
 		los.display(turn, board);
@@ -387,15 +411,17 @@ void Game::getLevelOneScreen()
 		while (_getch() != 13) {}
 		if(board.coordIsValid())
 		{
-			count++;
-			board.setBoard(turn);
+			if(turn == 1)
+				board.setBoardOnPlay(p1.getSymbol());
+			else
+				board.setBoardOnPlay(p2.getSymbol());
 
-			if (checkVictory(&board))
+			if (checkVictory(board))
 			{
 				board.setWinner();
 				finished = true;
 			}
-			if (checkTie(&board))
+			if (checkTie(board) && !finished)
 			{
 				board.setTie();
 				finished = true;
@@ -406,12 +432,6 @@ void Game::getLevelOneScreen()
 					turn = 2;
 				else
 					turn = 1;
-			}
-			if (count == 5)
-			{
-				finished = true;
-				board.setTie();
-				//board.setWinner();
 			}
 		}
 
@@ -442,13 +462,13 @@ void Game::getLevelTwoScreen()
 	LevelTwoScreen lts(stp.getLevelTwoFile(), stp.getWidth(), stp.getLevelTwoHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
 	ResultScreen rs(stp.getResultFile());
 	
+	stp.setConsoleColor("pink");
 	lts.resizeScreen();
 	lts.display(turn, board);
 
 	int number_of_options = lts.getNumberOfOptions();
-	turn = defineWhoStart(number_of_options);
+	turn = defineWhoStart(number_of_options, board.getSymbolX(), board.getSymbolO());
 
-	int count = 0;
 	do
 	{
 		lts.display(turn, board);
@@ -459,15 +479,17 @@ void Game::getLevelTwoScreen()
 		while (_getch() != 13) {}
 		if (board.coordIsValid())
 		{
-			count++;
-			board.setBoard(turn);
+			if (turn == 1)
+				board.setBoardOnPlay(p1.getSymbol());
+			else
+				board.setBoardOnPlay(p2.getSymbol());
 
-			if (checkVictory(&board))
+			if (checkVictory(board))
 			{
 				board.setWinner();
 				finished = true;
 			}
-			if (checkTie(&board))
+			if (checkTie(board) && !finished)
 			{
 				board.setTie();
 				finished = true;
@@ -478,12 +500,6 @@ void Game::getLevelTwoScreen()
 					turn = 2;
 				else
 					turn = 1;
-			}
-			if (count == 5)
-			{
-				finished = true;
-				//board.setWinner();
-				board.setTie();
 			}
 		}
 
@@ -514,13 +530,13 @@ void Game::getLevelThreeScreen()
 	LevelThreeScreen lts(stp.getLevelThreeFile(), stp.getWidth(), stp.getLevelThreeHeight(), stp.getLevel(), stp.getNPlayers(), p1, p2);
 	ResultScreen rs(stp.getResultFile());
 	
+	stp.setConsoleColor("red");
 	lts.resizeScreen();
 	lts.display(turn, board);
 
 	int number_of_options = lts.getNumberOfOptions();
-	turn = defineWhoStart(number_of_options);
+	turn = defineWhoStart(number_of_options, board.getSymbolX(), board.getSymbolO());
 
-	int count = 0;
 	do
 	{
 		lts.display(turn, board);
@@ -531,15 +547,17 @@ void Game::getLevelThreeScreen()
 		while (_getch() != 13){}
 		if (board.coordIsValid())
 		{
-			count++;
-			board.setBoard(turn);
+			if (turn == 1)
+				board.setBoardOnPlay(p1.getSymbol());
+			else
+				board.setBoardOnPlay(p2.getSymbol());
 
-			if (checkVictory(&board))
+			if (checkVictory(board))
 			{
 				board.setWinner();
 				finished = true;
 			}
-			if (checkTie(&board))
+			if (checkTie(board))
 			{
 				board.setTie();
 				finished = true;
@@ -550,12 +568,6 @@ void Game::getLevelThreeScreen()
 					turn = 2;
 				else
 					turn = 1;
-			}
-			if (count == 5)
-			{
-				finished = true;
-				//board.setWinner();
-				board.setTie();
 			}
 		}
 
@@ -578,15 +590,23 @@ void Game::getLevelThreeScreen()
 	}	
 }
 
-int Game::defineWhoStart(int numberOfOptions)
+int Game::defineWhoStart(int numberOfOptions, char symbol_x, char symbol_o)
 {
 	while (true)
 	{
 		int option = getUserOption(numberOfOptions);
 		if (option == 49)
+		{
+			p1.setSymbol(symbol_x);
+			p2.setSymbol(symbol_o);
 			return 1;
+		}			
 		if (option == 50)
+		{
+			p1.setSymbol(symbol_o);
+			p2.setSymbol(symbol_x);
 			return 2;
+		}			
 		else
 			return 0;
 	}
@@ -604,13 +624,114 @@ void Game::enterCoordY(Board * board)
 	board->setCoordY(coordY);
 }
 
-bool Game::checkVictory(Board * board)
+bool Game::checkVictory(Board &b)
 {
+	int size = b.getSize();
+	char * board = b.getBoard();
+	int countX;
+	int countO;
+	for (int y = 0; y < size; y++)
+	{
+		countX = 0;
+		countO = 0;
+		for (int x = 0; x < size; x++)
+		{
+			if (board[size*y + x] == 'X')
+				countX++;
+			if (board[size*y + x] == 'O')
+				countO++;
+		}
+		if(countX == size || countO == size)
+		{
+			for (int x = 0; x < size; x++)
+			{
+				b.setCoordX(x);
+				b.setCoordY(y);
+				b.setBoardResult();
+			}
+			return true;
+		}
+	}
+
+	for (int x = 0; x < size; x++)
+	{
+		countX = 0;
+		countO = 0;
+		for (int y = 0; y < size; y++)
+		{
+			if (board[size*y + x] == 'X')
+				countX++;
+			if (board[size*y + x] == 'O')
+				countO++;
+		}
+		if (countX == size || countO == size)
+		{
+			for (int y = 0; y < size; y++)
+			{
+				b.setCoordX(x);
+				b.setCoordY(y);
+				b.setBoardResult();
+			}
+			return true;
+		}
+	}
+
+	countX = 0;
+	countO = 0;
+	for (int xy = 0; xy < size; xy++)
+	{
+		if (board[size*xy + xy] == 'X')
+			countX++;
+		if (board[size*xy + xy] == 'O')
+			countO++;
+	}
+	if (countX == size || countO == size)
+	{
+		for (int xy = 0; xy < size; xy++)
+		{
+			b.setCoordX(xy);
+			b.setCoordY(xy);
+			b.setBoardResult();
+		}
+		return true;
+	}
+
+	countX = 0;
+	countO = 0;
+	for (int y = 0 , x = size-1; y < size; y++, x--)
+	{
+		if (board[size*y + x] == 'X')
+			countX++;
+		if (board[size*y + x] == 'O')
+			countO++;
+	}
+	if (countX == size || countO == size)
+	{
+		for (int y = 0, x = size-1; y < size; y++, x--)
+		{
+			b.setCoordX(x);
+			b.setCoordY(y);
+			b.setBoardResult();
+		}
+		return true;
+	}
+
 	return false;
 }
 
-bool Game::checkTie(Board * board)
+bool Game::checkTie(Board &b)
 {
+	char * board = b.getBoard();
+	int count = 0;
+	int size = b.getSize();
+	size = size*size;
+
+	for(int i = 0; i < size; i++)
+		if(board[i] == 'X' || board[i] == 'O')
+			count++;
+
+	if (count == size)
+		return true;
 	return false;
 }
 

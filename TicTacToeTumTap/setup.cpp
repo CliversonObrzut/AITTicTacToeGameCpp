@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "setup.h"
+#include "Windows.h"
 
 // Setup constructor
 Setup::Setup()
 {
 	player_one_name = "PL1";
-	player_two_name = "CPU";
+	player_two_name = "PL2";
 	n_players = 1;
 	level = 3;
 	winner_points = 3;
@@ -16,6 +17,7 @@ Setup::Setup()
 	level_file = "gameLevel.txt";
 	rules_file = "gameRules.txt";
 	ranking_file = "gameRanking.txt";
+	original_ranking_file = "gameRankingOriginal.txt";
 	result_file = "gameResult.txt";
 	level_one_file = "gameBoardLevel1.txt";
 	level_two_file = "gameBoardLevel2.txt";
@@ -117,6 +119,12 @@ string Setup::getRankingFile()
 	return ranking_file;
 }
 
+string Setup::getOriginalRankingFile()
+{
+	return original_ranking_file;
+}
+
+
 string Setup::getResultFile()
 {
 	return result_file;
@@ -185,4 +193,25 @@ int Setup::getLevelThreeHeight()
 {
 	return level_three_height;
 }
+
+void Setup::setConsoleColor(string color)
+{
+	if(color == "blue-green")
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x3F);
+	}
+	if(color == "green-yellow")
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x6F);
+	}
+	if (color == "pink")
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x5F);
+	}
+	if (color == "red")
+	{
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x4F);
+	}
+}
+
 

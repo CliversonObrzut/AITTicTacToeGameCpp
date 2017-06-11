@@ -19,6 +19,7 @@ class Setup
 	string level_file;
 	string rules_file;
 	string ranking_file;
+	string original_ranking_file;
 	string result_file;
 	string level_one_file;
 	string level_two_file;
@@ -50,6 +51,7 @@ public:
 	string getLevelFile();
 	string getRulesFile();
 	string getRankingFile();
+	string getOriginalRankingFile();
 	string getResultFile();
 	string getLeveOneFile();
 	string getLevelTwoFile();
@@ -65,6 +67,8 @@ public:
 	int getLevelOneHeight();
 	int getLevelTwoHeight();
 	int getLevelThreeHeight();
+
+	void setConsoleColor(string color);
 };
 
 #endif

@@ -18,7 +18,8 @@ public:
 	Board();
 	Board(int level);
 	char * getBoard();
-	void setBoard(int turn);
+	void setBoardOnPlay(char symbol);
+	void setBoardResult();
 	char getSymbolO();
 	char getSymbolX();
 	int getSize();

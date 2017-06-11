@@ -105,9 +105,9 @@ void Gui::redrawPlayScreen(Board board, Player p1, Player p2, int turn, bool * f
 
 		string player_turn = "";
 		if (turn == 1)
-			player_turn = p1.getName() + "'s turn!     ";
+			player_turn = "- " + p1.getName() + "'s turn!     ";
 		else
-			player_turn = p2.getName() + "'s turn!     ";
+			player_turn = "- " + p2.getName() + "'s turn!     ";
 
 		drawTextInScreen(screen, player_turn, textX, textY);
 		drawTextInScreen(screen, coord_x, textX, textY + 1);
@@ -231,8 +231,6 @@ void Gui::updateScreen(string* screen)
 	cout << newContent;
 }
 
-
-
 // WelcomeScreen constructor
 WelcomeScreen::WelcomeScreen(string fileName, int width, int height) : Gui(fileName, width, height)
 {
@@ -334,7 +332,7 @@ int RulesScreen::getNumberOfOptions()
 // RankingScreen constructor
 RankingScreen::RankingScreen(string fileName, int width, int height) : Gui(fileName, width, height)
 {
-	number_of_options = 1;
+	number_of_options = 2;
 }
 
 int RankingScreen::getNumberOfOptions()
@@ -540,11 +538,3 @@ int ResultScreen::getTextY()
 {
 	return text_y;
 }
-
-
-
-
-
-
-
-

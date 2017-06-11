@@ -46,6 +46,9 @@
     <Text Include="gameWelcome.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="gameRankingOriginal.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

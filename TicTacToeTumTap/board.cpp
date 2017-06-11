@@ -32,13 +32,16 @@ char * Board::getBoard()
 	return board;
 }
 
-void Board::setBoard(int turn)
+void Board::setBoardOnPlay(char symbol)
 {
-	if (turn == 1)
-		board[(size*coord_y)+coord_x] = symbol_x;
-	else
-		board[(size*coord_y)+coord_x] = symbol_o;
+	board[(size*coord_y)+coord_x] = symbol;
 }
+
+void Board::setBoardResult()
+{
+	board[(size*coord_y) + coord_x] = '#';
+}
+
 
 int Board::getSize()
 {
