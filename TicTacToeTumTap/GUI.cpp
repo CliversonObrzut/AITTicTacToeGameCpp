@@ -495,7 +495,7 @@ int LevelThreeScreen::getTextY()
 
 ResultScreen::ResultScreen(string fileName) : Gui(fileName)
 {
-	number_of_options = 1;
+	number_of_options = 2;
 	name_x = 41;
 	name_y =24;
 	points_x = 78;

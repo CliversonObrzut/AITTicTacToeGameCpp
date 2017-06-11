@@ -30,11 +30,13 @@ public:
 	void updateScreen(string * screen);
 };
 
+
 class WelcomeScreen : public Gui
 {	
 public:
 	WelcomeScreen(string fileName, int width, int height);
 };
+
 
 class MenuScreen : public Gui
 {
@@ -43,6 +45,7 @@ public:
 	MenuScreen(string fileName, int width, int height);
 	int getNumberOfOptions();
 };
+
 
 class PlayerScreen : public Gui
 {
@@ -59,6 +62,7 @@ public:
 	char getSelectSymbol();
 };
 
+
 class LevelScreen : public Gui
 {
 	int number_of_options;
@@ -74,6 +78,7 @@ public:
 	char getSelectSymbol();
 };
 
+
 class RulesScreen : public Gui
 {
 	int number_of_options;
@@ -82,6 +87,7 @@ public:
 	int getNumberOfOptions();
 };
 
+
 class RankingScreen : public Gui
 {
 	int number_of_options;
@@ -89,6 +95,7 @@ public:
 	RankingScreen(string fileName, int width, int height);
 	int getNumberOfOptions();
 };
+
 
 class LevelOneScreen : public Gui
 {
@@ -111,6 +118,7 @@ public:
 	int getTextY();
 };
 
+
 class LevelTwoScreen : public Gui
 {
 	Player p1;
@@ -132,6 +140,7 @@ public:
 	int getTextY();
 };
 
+
 class LevelThreeScreen : public Gui
 {
 	Player p1;
@@ -152,6 +161,7 @@ public:
 	int getTextX();
 	int getTextY();
 };
+
 
 class ResultScreen : public Gui
 {

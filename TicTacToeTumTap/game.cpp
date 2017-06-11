@@ -249,7 +249,7 @@ void Game::updateLinkedListRanking(LinkedList * scores, LinkedList * players, no
 void Game::getWelcomeScreen()
 {
 	WelcomeScreen ws(stp.getWelcomeFile(), stp.getWidth(), stp.getWelcomeHeight());
-	stp.setConsoleColor("blue");
+	stp.setConsoleColor("blue-green");
 	ws.resizeScreen();
 	ws.display();
 	Sleep(2000);
@@ -376,8 +376,10 @@ void Game::getRankingScreen()
 	{
 		int option = getUserOption(rs.getNumberOfOptions());
 		if (option == 49)
+		{
 			menu = true;
-		if (option == 50)
+		}			
+		else if (option == 50)
 		{
 			resetRanking();
 			menu = true;

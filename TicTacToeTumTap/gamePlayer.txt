@@ -11,7 +11,7 @@
 @                                          +----------------------------+                                        @
 @                                          |          PLAYERS           |                                        @
 @                                          |                            |                                        @
-@                                          |  Z  Press 1 - P1 x CPU     |                                        @
+@                                          |     Press 1 - P1 x CPU     |                                        @
 @                                          |     Press 2 - P1 x P2      |                                        @
 @                                          |     Press 3 - Menu         |                                        @
 @                                          |                            |                                        @

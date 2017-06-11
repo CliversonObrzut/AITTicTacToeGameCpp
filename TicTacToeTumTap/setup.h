@@ -1,6 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "player.h"
 
 #ifndef SETUP
 #define SETUP
